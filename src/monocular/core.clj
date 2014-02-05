@@ -1,9 +1,9 @@
 (ns monocular.core
   (:require [instaparse.core :as insta]
-            [datomic.api :as d]
-            [monocular.simple :as simple]))
+            [instaparse.combinators :refer [ebnf]]
+            [datomic.api :as d]))
 
-(defn base-gramamr
+(def base-gramamr
   (ebnf
     "search = term (<whitespace> term)*
      default = value

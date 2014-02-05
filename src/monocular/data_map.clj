@@ -1,6 +1,5 @@
 (ns monocular.data-map
-  (:require [instaparse.combinators :refer [nt hide hide-tag cat alt string ebnf]]
-            [instaparse.core :as insta]))
+  (:require [instaparse.combinators :refer [nt hide hide-tag cat alt string ebnf]]))
 
 (defn fmap-with-key
   "Similar to clojure.algo.generic.functor/fmap. Takes a map and applies f to
@@ -44,19 +43,3 @@
          (keyword-rule :keyword-value keywords)
          (keywords->grammar magic-keywords)
          (keywords->grammar keywords (cat (hide (string ":")) (nt :value)))))
-
-
-;(def base-grammar
-;  (ebnf
-;    "search = term (<whitespace> term)*
-;     default = value
-;     <value> = quoted-value | raw-value
-;     <raw-value> = #'[^\":\\s]+'
-;     <quoted-value> = <'\"'> #'[^\"]*' <'\"'>
-;     whitespace = #'\\s+'"))
-
-
-;     <term> = magic-keyword | !magic-keyword (keyword-value | default)
-
-;(def test-parser
-;  (insta/parser base-grammar :start :search))
