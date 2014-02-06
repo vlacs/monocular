@@ -1,5 +1,6 @@
 (ns monocular.data-map
-  (:require [instaparse.combinators :refer [nt hide hide-tag cat alt string ebnf]]))
+  (:require [instaparse.combinators :refer [nt hide hide-tag cat alt string ebnf]]
+            [clojure.algo.generic.functor :refer [fmap]]))
 
 ;; utilities
 
@@ -49,3 +50,18 @@
          (keyword-rule :keyword-value keywords)
          (keywords->grammar magic-keywords)
          (keywords->grammar keywords (cat (hide (string ":")) (nt :value)))))
+
+;; transforms
+
+(defn keyword->transform [kw] (:fn kw))
+
+(defn keywords->transforms
+  [key-type keywords]
+  (if (empty? keywords) {}
+      (fmap keyword->transform keywords)))
+
+(defn map->transforms
+  [{:keys [magic-keywords keywords default]}]
+  (merge {:default default}
+         (keywords->transforms :magic-keyword magic-keywords)
+         (keywords->transforms :keywords keywords)))
