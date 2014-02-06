@@ -6,7 +6,19 @@ open sea for vessels to plunder.
 
 ## Usage
 
-Currently Monocular doesn't do much.
+Currently Monocular doesn't do much. To create a searcher you can enter:
+
+```clj
+=> (def my-searcher (monocular.core/searcher my-data-map))
+```
+
+And to perform searches (currently returns an
+[Instaparse](https://github.com/Engelberg/instaparse) parse tree) you can enter:
+
+```clj
+=> (monocular.core/search my-searcher search-string)
+[:search [...]]
+```
 
 ### Data-map
 
