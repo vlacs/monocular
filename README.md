@@ -1,10 +1,10 @@
 # Monocular
 
-![monocular](http://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Emblemata_1624.jpg/320px-Emblemata_1624.jpg)
-
 A Clojure library designed to make creating searches easy. The name *Monocular*
 was chosen as it's the stereotypical tool seen used by pirates searching the
 open sea for vessels to plunder.
+
+![monocular](http://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Emblemata_1624.jpg/320px-Emblemata_1624.jpg)
 
 ## Usage
 
