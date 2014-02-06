@@ -33,7 +33,7 @@ If you've written your search functions to be composable, you can then consume
 the vector like this:
 
 ```clj
-=> ((apply comp (monocular.core/search my-searcher search-string) base-query))
+=> ((apply comp (monocular.core/search my-searcher search-string)) base-query)
 ```
 
 ### Data-map
