@@ -8,18 +8,32 @@ open sea for vessels to plunder.
 
 ## Usage
 
-Currently Monocular doesn't do much. To create a searcher you can enter:
+Monocular is currently in development. To create a searcher you can enter:
 
 ```clj
 => (def my-searcher (monocular.core/searcher my-data-map))
 ```
-
-And to perform searches (currently returns an
-[Instaparse](https://github.com/Engelberg/instaparse) parse tree) you can enter:
+Where my-data-map is a data map as described below. To perform searches you can
+enter:
 
 ```clj
 => (monocular.core/search my-searcher search-string)
-[:search [...]]
+```
+
+Currently this returns a vector of functions that are partial applications of
+the functions defined in the data map. Such a function definition may look like:
+
+```clj
+(defn search-by-name-fn
+  [name query]
+  (...some things that return a new query...))
+```
+
+If you've written your search functions to be composable, you can then consume
+the vector like this:
+
+```clj
+=> ((apply comp (monocular.core/search my-searcher search-string) base-query))
 ```
 
 ### Data-map
