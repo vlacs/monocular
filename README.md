@@ -6,7 +6,7 @@ sea for vessels to plunder.
 
 ## Usage
 
-When there is something to use, this will describe it's usage.
+When there is something to use, this will describe its usage.
 
 ## License
 
