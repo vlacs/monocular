@@ -22,7 +22,7 @@ And to perform searches (currently returns an
 
 ### Data-map
 
-Ultimately to use Monocular one will define a map that relates search terms to
+Creating searchers in Monocular requires creating a map that relates search terms to
 Datomic/SQL/your-special-filtering-function. Here is an example of what such a
 map would look like for performing searches on a set of customers:
 
