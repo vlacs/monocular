@@ -56,12 +56,12 @@
 (defn keyword->transform [kw] (:fn kw))
 
 (defn keywords->transforms
-  [key-type keywords]
+  [keywords]
   (if (empty? keywords) {}
       (fmap keyword->transform keywords)))
 
 (defn map->transforms
   [{:keys [magic-keywords keywords default]}]
   (merge {:default default}
-         (keywords->transforms :magic-keyword magic-keywords)
-         (keywords->transforms :keywords keywords)))
+         (keywords->transforms magic-keywords)
+         (keywords->transforms keywords)))
