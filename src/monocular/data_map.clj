@@ -53,15 +53,17 @@
 
 ;; transforms
 
-(defn keyword->transform [kw] (:fn kw))
+(defn keyword->transform [kw] (fn [value] (partial (:fn kw) value)))
+
+(defn magic-keyword->transform [kw] (fn [] (:fn kw)))
 
 (defn keywords->transforms
-  [keywords]
+  [keywords pre-transform-fn]
   (if (empty? keywords) {}
-      (fmap keyword->transform keywords)))
+      (fmap pre-transform-fn keywords)))
 
 (defn map->transforms
   [{:keys [magic-keywords keywords default]}]
-  (merge {:default default}
-         (keywords->transforms magic-keywords)
-         (keywords->transforms keywords)))
+  (merge {:default (fn [value] (partial default value))}
+         (keywords->transforms magic-keywords magic-keyword->transform)
+         (keywords->transforms keywords keyword->transform)))
