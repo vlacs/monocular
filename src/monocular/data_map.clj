@@ -1,17 +1,21 @@
 (ns monocular.data-map
   (:require [instaparse.combinators :refer [nt hide hide-tag cat alt string ebnf]]))
 
+;; utilities
+
 (defn fmap-with-key
   "Similar to clojure.algo.generic.functor/fmap. Takes a map and applies f to
   each key value pair."
   [f m]
     (into (empty m) (for [[k v] m] [k (f k v)])))
 
+;; grammar
+
 (defn apply-alt
   [grammar]
   (if (> (count grammar) 1)
-    (apply alt grammar)
-    (first grammar)))
+      (apply alt grammar)
+      (first grammar)))
 
 (defn keyword->grammar
   ([keyword-name keyword-data]
@@ -28,7 +32,7 @@
 
 (defn keyword-rule [key-type keywords]
   (if (empty? keywords) {}
-    {key-type (hide-tag (apply-alt (map #(nt %1) (keys keywords))))}))
+      {key-type (hide-tag (apply-alt (map #(nt %1) (keys keywords))))}))
 
 (defn term-rule [have-magic-keywords have-keywords]
   (ebnf (str "<term> = "
