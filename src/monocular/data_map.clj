@@ -14,8 +14,10 @@
     (first grammar)))
 
 (defn keyword->grammar
-  ([keyword-name keyword-data] (apply-alt (map #(hide (string %1)) (conj (:alias keyword-data) (name keyword-name)))))
-  ([keyword-name keyword-data suffix] (cat (keyword->grammar keyword-name keyword-data) suffix)))
+  ([keyword-name keyword-data]
+   (apply-alt (map #(hide (string %1)) (conj (:alias keyword-data) (name keyword-name)))))
+  ([keyword-name keyword-data suffix]
+   (cat (keyword->grammar keyword-name keyword-data) suffix)))
 
 ; todo: is there a better way to do this?
 (defn keywords->grammar
