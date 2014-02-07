@@ -13,16 +13,26 @@
      <quoted-value> = <'\"'> #'[^\"]*' <'\"'>
      whitespace = #'\\s+'"))
 
+;; We may want to have the option to change this. For our original idea of the
+;; transform functions taking a Datomic and returning a Datomic query, this is
+;; what we want, but if you're doing SQL, you may want your transform functions
+;; to return strings that are put together afterward.
 (def base-transforms
-  {:search (comp vec list)})
-
-(defn searcher
-  [data-map]
-  {:parser (insta/parser (merge base-grammar (map->grammar data-map)) :start :search)
-   :transforms (merge base-transforms (map->transforms data-map))})
+  {:search comp})
 
 (defn search
   [searcher string]
   (->> string
       (insta/parse (:parser searcher))
       (insta/transform (:transforms searcher))))
+
+(defrecord Searcher [parser transforms]
+  clojure.lang.IFn
+  (invoke [searcher string] (search searcher string))
+  (applyTo [searcher args] (apply search searcher args)))
+
+(defn searcher
+  [data-map]
+  (Searcher. (insta/parser (merge base-grammar (map->grammar data-map)) :start :search)
+             (merge base-transforms (map->transforms data-map))))
+
