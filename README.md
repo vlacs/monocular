@@ -32,8 +32,9 @@ Keyword searches take the form "keyword:value". Magic keywords are used to
 perform predefined searches that don't require a value. The function defined by
 default handles terms entered into the search that aren't keyword or magic
 keyword searches. Keywords, magic keywords, and default searches are described
-in more detail below, under *Data-map*. Keyword and default functions take a
-search term and a set, and return a set:
+in more detail below, under *Data-map*.
+
+Keyword and default functions take a search term and a set, and return a set:
 
 ```clj
 (defn filter-name [s doctors]
@@ -62,7 +63,7 @@ the `classic-doctors` magic-keyword:
 
 ```clj
 => (doctor-search "classic-doctors")
-({:fname "William" ...} ...)
+({:fname "William" :lname "Hartnell" ...} ...)
 ```
 
 If we had different data sets we needed to be able to search on we could define
@@ -76,7 +77,7 @@ To do the same search as before:
 
 ```clj
 => ((doctor-searcher "classic-doctors") doctor-recs)
-({:fname "William" ...} ...)
+({:fname "William" :lname "Hartnell" ...} ...)
 ```
 
 ### Data-map
