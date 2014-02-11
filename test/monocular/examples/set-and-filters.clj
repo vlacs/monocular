@@ -54,9 +54,9 @@
                     :alt-doctors     {:fn filter-alt-doctors}}
    :default filter-default})
 
+;; when you always use the same data set
+(monocular/defsearch doctor-search doctor-data-map doctor-recs)
+
+;; lets you search different data sets like:
+;; => ((doctor-searcher search-string) data-set)
 (def doctor-searcher (monocular/searcher doctor-data-map))
-
-(defn doctor-search [s]
-  ((doctor-searcher s) doctor-recs))
-
-(monocular/defsearch doctor-search2 doctor-data-map doctor-recs)
