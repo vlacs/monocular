@@ -8,32 +8,75 @@ open sea for vessels to plunder.
 
 ## Usage
 
-Monocular is currently in development. To create a searcher you can enter:
+*Monocular is currently in development, and the usage outlined here is subject
+to change.*
+
+The first step to using Monocular is defining how searches map to your search
+functions. In this example we're creating a search to find actors that have
+played the Doctor in BBC's Doctor Who (see the complete code in
+test/monocular/examples/set-and-filters.clj). Here is the data-map for our
+Doctor search:
 
 ```clj
-=> (def my-searcher (monocular.core/searcher my-data-map))
+(def doctor-data-map
+  {:keywords       {:name            {:alias ["fullname"] :fn filter-name}
+                    :doctor          {:fn filter-doctor}}
+   :magic-keywords {:new-doctors     {:fn filter-new-doctors}
+                    :classic-doctors {:fn filter-classic-doctors}
+                    :main-doctors    {:fn filter-main-doctors}
+                    :alt-doctors     {:fn filter-alt-doctors}}
+   :default filter-default})
 ```
-Where my-data-map is a data map as described below. To perform searches you can
-enter:
+
+Keyword searches take the form "keyword:value". Magic keywords are used to
+perform predefined searches that don't require a value. The function defined by
+default handles terms entered into the search that aren't keyword or magic
+keyword searches. Keywords, magic keywords, and default searches are described
+in more detail below, under *Data-map*. Keyword and default functions take a
+search term and a set, and return a set:
 
 ```clj
-=> (monocular.core/search my-searcher search-string)
+(defn filter-name [s doctors]
+  (filter #(.contains (str (:fname %1) " " (:lname %1)) s) doctors))
 ```
 
-Currently this returns a vector of functions that are partial applications of
-the functions defined in the data map. Such a function definition may look like:
+Magic keyword functions take a set and return a set:
 
 ```clj
-(defn search-by-name-fn
-  [name query]
-  (...some things that return a new query...))
+(defn filter-new-doctors [doctors]
+  (filter #(contains? (:tags %1) :new) doctors))
 ```
 
-If you've written your search functions to be composable, you can then consume
-the vector like this:
+Once you've defined your search functions and created the data map you can
+create the search. Our search will alway use the same data set (in our case
+the set `doctor-recs`), so we can use defsearch:
 
 ```clj
-=> ((apply comp (monocular.core/search my-searcher search-string)) base-query)
+(require '[monocular.core :as monocular])
+
+(monocular/defsearch doctor-search doctor-data-map doctor-recs)
+```
+
+To get a set containing all classic doctors we could now do the following, using
+the `classic-doctors` magic-keyword:
+
+```clj
+=> (doctor-search "classic-doctors")
+({:fname "William" ...} ...)
+```
+
+If we had different data sets we needed to be able to search on we could define
+a searcher:
+
+```clj
+(def doctor-searcher (monocular/searcher doctor-data-map))
+```
+
+To do the same search as before:
+
+```
+=> ((doctor-searcher "classic-doctors") doctor-recs)
+({:fname "William" ...} ...)
 ```
 
 ### Data-map
