@@ -14,8 +14,9 @@ to change.*
 The first step to using Monocular is defining how searches map to your search
 functions. In this example we're creating a search to find actors that have
 played the Doctor in BBC's Doctor Who (see the complete code in
-test/monocular/examples/set-and-filters.clj). Here is the data-map for our
-Doctor search:
+test/monocular/examples/set-and-filters.clj). In this example our data is stored
+in a set, and our search functions use `filter` to narrow results. Here is the
+data-map for our Doctor search:
 
 ```clj
 (def doctor-data-map
@@ -48,9 +49,9 @@ Magic keyword functions take a set and return a set:
   (filter #(contains? (:tags %1) :new) doctors))
 ```
 
-Once you've defined your search functions and created the data map you can
-create the search. Our search will alway use the same data set (in our case
-the set `doctor-recs`), so we can use defsearch:
+Once the search functions and data map have been defined we can create the
+search. Our search will alway use the same data set (in our case the set
+`doctor-recs`), so we can use defsearch:
 
 ```clj
 (require '[monocular.core :as monocular])
@@ -66,8 +67,8 @@ the `classic-doctors` magic-keyword:
 ({:fname "William" :lname "Hartnell" ...} ...)
 ```
 
-If we had different data sets we needed to be able to search on we could define
-a searcher:
+If we needed to be able to search on different sets we could define a searcher
+instead of using defsearch:
 
 ```clj
 (def doctor-searcher (monocular/searcher doctor-data-map))
