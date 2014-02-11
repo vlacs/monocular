@@ -36,3 +36,11 @@
   (Searcher. (insta/parser (merge base-grammar (map->grammar data-map)) :start :search)
              (merge base-transforms (map->transforms data-map))))
 
+;; Is this a good way to do this? It seems something like this is worth having.
+;; It seems likely that most cases won't need to perform searches on more than
+;; one set of data, and this makes that easy.
+(defmacro defsearch
+  [name data-map data-set]
+  (let [searchersym (gensym name)]
+    `(do (def ~searchersym (searcher ~data-map))
+         (defn ~name [search#] ((~searchersym search#) ~data-set)))))
