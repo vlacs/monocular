@@ -74,7 +74,7 @@ a searcher:
 
 To do the same search as before:
 
-```
+```clj
 => ((doctor-searcher "classic-doctors") doctor-recs)
 ({:fname "William" ...} ...)
 ```
