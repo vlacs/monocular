@@ -1,4 +1,5 @@
 (ns monocular.examples.set-with-filters
+  ^{:doc "Example showing how to use Monocular with Clojure sets and filter."}
   (:require [monocular.core :as monocular]
             [clojure.set :refer [union]]))
 
@@ -54,9 +55,31 @@
                     :alt-doctors     {:fn filter-alt-doctors}}
    :default filter-default})
 
-;; when you always use the same data set
+;; for when you always use the same data set, lets you search like:
+;; (doctor-search search-string)
 (monocular/defsearch doctor-search doctor-data-map doctor-recs)
 
 ;; lets you search different data sets like:
 ;; => ((doctor-searcher search-string) data-set)
 (def doctor-searcher (monocular/searcher doctor-data-map))
+
+(comment
+  ;; search for "Baker"
+  (doctor-search "Baker")
+
+  ;; search for all classic Doctors
+  (doctor-search "classic-doctors")
+
+  ;; search for all classic main Doctors
+  (doctor-search "classic-doctors main-doctors")
+
+  ;; get just Doctor 12
+  (doctor-search "doctor:12")
+
+  ;; get the Valeyard Doctor with "Hughes" in his name
+  (doctor-search "doctor:Valeyard name:Hughes")
+
+  ;; get William Hartnell
+  (doctor-search "doctor:\"William Hartnell\"")   ;; note that the actual search string here is 'doctor:"William Hartnell"'
+
+  )
