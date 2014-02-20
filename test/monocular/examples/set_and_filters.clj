@@ -1,4 +1,4 @@
-(ns monocular.examples.set-with-filters
+(ns monocular.examples.set-and-filters
   ^{:doc "Example showing how to use Monocular with Clojure sets and filter."}
   (:require [monocular.core :as monocular]
             [clojure.set :refer [union]]))
