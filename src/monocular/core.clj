@@ -13,10 +13,11 @@
      <quoted-value> = <'\"'> #'[^\"]*' <'\"'>
      whitespace = #'\\s+'"))
 
-;; We may want to have the option to change this. For our original idea of the
-;; transform functions taking a Datomic and returning a Datomic query, this is
-;; what we want, but if you're doing SQL, you may want your transform functions
-;; to return strings that are put together afterward.
+;; We may want to have the option to change this. For our original
+;; idea of the transform functions taking a Datomic query and
+;; returning a Datomic query, this is what we want, but if you're
+;; doing SQL, you may want your transform functions to return strings
+;; that are put together afterward.
 (def base-transforms
   {:search comp})
 
