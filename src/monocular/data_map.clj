@@ -18,13 +18,17 @@
       (apply alt grammar)
       (first grammar)))
 
+;; todo: is there a better way to do this?
+;; Can we somehow avoid treating the suffix case and the suffixless case separately?
 (defn keyword->grammar
+  "Generates instaparse grammar for single keyword/magic-keyword"
   ([keyword-name keyword-data]
    (apply-alt (map #(hide (string %1)) (conj (:alias keyword-data) (name keyword-name)))))
   ([keyword-name keyword-data suffix]
    (cat (keyword->grammar keyword-name keyword-data) suffix)))
 
-; todo: is there a better way to do this?
+;; todo: is there a better way to do this?
+;; Can we somehow avoid treating the suffix case and the suffixless case separately?
 (defn keywords->grammar
   ([keywords]
    (fmap-with-key keyword->grammar keywords))
