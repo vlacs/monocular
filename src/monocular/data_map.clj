@@ -71,3 +71,15 @@
   (merge {:default (fn [value] (partial default value))}
          (keywords->transforms magic-keywords magic-keyword->transform)
          (keywords->transforms keywords keyword->transform)))
+
+
+(comment
+  (map->grammar 
+   {:magic-keywords {:one-seg {:alias ["one-segment-course"]
+                               :fn :some-fn-would-go-here }
+                     :gug {:alias ["guggenheim"]
+                           :fn :some-fn-would-go-here}}
+    :keywords {:comp {:alias ["competency"]
+                      :fn :some-fn-would-go-here}
+               :tag {:fn :some-fn-would-go-here}}
+    :default :some-fn-would-go-here}))
