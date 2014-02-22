@@ -1,4 +1,5 @@
-# Monocular
+# Monocular [![Build Status](https://travis-ci.org/vlacs/monocular.png?branch=master)](https://travis-ci.org/vlacs/monocular)
+
 
 A Clojure library designed to make creating searches easy. The name *Monocular*
 was chosen as it's the stereotypical tool seen used by pirates searching the
