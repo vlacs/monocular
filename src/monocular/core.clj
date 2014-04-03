@@ -38,8 +38,3 @@
   [data-map]
   (Searcher. (insta/parser (merge base-grammar (map->grammar data-map)) :start :search)
              (map->transforms data-map)))
-
-(defmacro defsearch
-  [name data-map data-set]
-  `(let [searchersym# (searcher ~data-map)]
-     (defn ~name [search#] ((searchersym# search#) ~data-set))))
