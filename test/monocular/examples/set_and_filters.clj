@@ -47,12 +47,13 @@
   (filter (complement main-doctor?) doctors))
 
 (def doctor-data-map
-  {:keywords       {:name            {:alias ["fullname"] :fn filter-name}
-                    :doctor          {:fn filter-doctor}}
-   :magic-keywords {:new-doctors     {:fn filter-new-doctors}
-                    :classic-doctors {:fn filter-classic-doctors}
-                    :main-doctors    {:fn filter-main-doctors}
-                    :alt-doctors     {:fn filter-alt-doctors}}
+  {:keywords       {:name               filter-name
+                    :fullname           filter-name
+                    :doctor             filter-doctor}
+   :magic-keywords {:new-doctors        filter-new-doctors
+                    :classic-doctors    filter-classic-doctors
+                    :main-doctors       filter-main-doctors
+                    :alt-doctors        filter-alt-doctors}
    :default filter-default})
 
 ;; for when you always use the same data set, lets you search like:
