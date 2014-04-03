@@ -18,22 +18,18 @@
       (apply alt grammar)
       (first grammar)))
 
-;; todo: is there a better way to do this?
-;; Can we somehow avoid treating the suffix case and the suffixless case separately?
 (defn keyword->grammar
   "Generates instaparse grammar for single keyword/magic-keyword"
-  ([keyword-name keyword-data]
-   (apply-alt (map #(hide (string %1)) (conj (:alias keyword-data) (name keyword-name)))))
-  ([keyword-name keyword-data suffix]
-   (cat (keyword->grammar keyword-name keyword-data) suffix)))
+  ([keyword-name]
+     (hide (string (name keyword-name))))
+  ([keyword-name suffix]
+     (cat (keyword->grammar keyword-name) suffix)))
 
-;; todo: is there a better way to do this?
-;; Can we somehow avoid treating the suffix case and the suffixless case separately?
 (defn keywords->grammar
   ([keywords]
-   (fmap-with-key keyword->grammar keywords))
+     (zipmap keywords (map keyword->grammar keywords)))
   ([keywords suffix]
-   (fmap-with-key #(keyword->grammar %1 %2 suffix) keywords)))
+     (zipmap keywords (map #(keyword->grammar %1 suffix) keywords))))
 
 (defn keyword-rule [key-type keywords]
   (if (empty? keywords) {}
@@ -47,19 +43,15 @@
                    :else "default"))))
 
 (defn map->grammar
-  "Takes a monocular data map and returns the associated grammar"
+  "Takes a monocular data map and returns instaparse grammar."
   [{:keys [magic-keywords keywords]}]
   (merge (term-rule (not (empty? magic-keywords)) (not (empty? keywords)))
          (keyword-rule :magic-keyword magic-keywords)
          (keyword-rule :keyword-value keywords)
-         (keywords->grammar magic-keywords)
-         (keywords->grammar keywords (cat (hide (string ":")) (nt :value)))))
+         (keywords->grammar (keys magic-keywords))
+         (keywords->grammar (keys keywords) (cat (hide (string ":")) (nt :value)))))
 
 ;; transforms
-
-(defn keyword->transform [kw] (fn [value] (partial (:fn kw) value)))
-
-(defn magic-keyword->transform [kw] (fn [] (:fn kw)))
 
 (defn keywords->transforms
   [keywords pre-transform-fn]
@@ -67,19 +59,16 @@
       (fmap pre-transform-fn keywords)))
 
 (defn map->transforms
+  "Takes a monocular data map and returns instaparse transforms. When the transforms are applied to the parse tree, keywords/default"
   [{:keys [magic-keywords keywords default]}]
-  (merge {:default (fn [value] (partial default value))}
-         (keywords->transforms magic-keywords magic-keyword->transform)
-         (keywords->transforms keywords keyword->transform)))
-
+  (merge {:default (partial partial default)}
+         (keywords->transforms magic-keywords #(fn [] %1))
+         (keywords->transforms keywords #(partial partial %1))))
 
 (comment
-  (map->grammar 
-   {:magic-keywords {:one-seg {:alias ["one-segment-course"]
-                               :fn :some-fn-would-go-here }
-                     :gug {:alias ["guggenheim"]
-                           :fn :some-fn-would-go-here}}
-    :keywords {:comp {:alias ["competency"]
-                      :fn :some-fn-would-go-here}
-               :tag {:fn :some-fn-would-go-here}}
+  (map->grammar
+   {:magic-keywords {:one-seg :some-fn-would-go-here
+                     :gug :some-fn-would-go-here}
+    :keywords {:comp :some-fn-would-go-here
+               :tag :some-fn-would-go-here}
     :default :some-fn-would-go-here}))
