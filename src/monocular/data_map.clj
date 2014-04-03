@@ -2,14 +2,6 @@
   (:require [instaparse.combinators :refer [nt hide hide-tag cat alt string ebnf]]
             [clojure.algo.generic.functor :refer [fmap]]))
 
-;; utilities
-
-(defn fmap-with-key
-  "Similar to clojure.algo.generic.functor/fmap. Takes a map and applies f to
-  each key value pair."
-  [f m]
-    (into (empty m) (for [[k v] m] [k (f k v)])))
-
 ;; grammar
 
 (defn apply-alt
