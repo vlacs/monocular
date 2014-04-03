@@ -1,8 +1,7 @@
 (ns monocular.core
   (:require [monocular.data-map :refer [map->grammar map->transforms]]
             [instaparse.core :as insta]
-            [instaparse.combinators :refer [ebnf]]
-            [datomic.api :as d]))
+            [instaparse.combinators :refer [ebnf]]))
 
 (def base-grammar
   (ebnf
