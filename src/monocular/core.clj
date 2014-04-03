@@ -12,29 +12,32 @@
      <quoted-value> = <'\"'> #'[^\"]*' <'\"'>
      whitespace = #'\\s+'"))
 
-;; We may want to have the option to change this. For our original
-;; idea of the transform functions taking a Datomic query and
-;; returning a Datomic query, this is what we want, but if you're
-;; doing SQL, you may want your transform functions to return strings
-;; that are put together afterward.
-(def base-transforms
-  {:search comp})
+(defn parse
+  "Parse a search without transforming it"
+  [searcher string]
+  (vec (rest (insta/parse (:parser searcher) string))))
+
+(defn transform
+  "Transform a parsed search into a function that takes a data set and returns a result"
+  [searcher parse-tree]
+  (->> parse-tree
+       (insta/transform (:transforms searcher))
+       (apply (comp))))
 
 (defn search
-  [searcher string]
-  (->> string
-      (insta/parse (:parser searcher))
-      (insta/transform (:transforms searcher))))
+  "Parse, transform, and search in one step"
+  [searcher string data-set]
+  ((transform searcher (parse searcher string)) data-set))
 
 (defrecord Searcher [parser transforms]
   clojure.lang.IFn
-  (invoke [searcher string] (search searcher string))
+  (invoke [searcher string data-set] (search searcher string data-set))
   (applyTo [searcher args] (apply search searcher args)))
 
 (defn searcher
   [data-map]
   (Searcher. (insta/parser (merge base-grammar (map->grammar data-map)) :start :search)
-             (merge base-transforms (map->transforms data-map))))
+             (map->transforms data-map)))
 
 (defmacro defsearch
   [name data-map data-set]
