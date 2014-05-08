@@ -22,7 +22,7 @@
   [searcher parse-tree]
   (->> parse-tree
        (insta/transform (:transforms searcher))
-       (apply (comp))))
+       (apply comp)))
 
 (defn search
   "Parse, transform, and search in one step"
